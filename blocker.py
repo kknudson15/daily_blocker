@@ -15,7 +15,7 @@ Adding sites to hosts file that will block them from being accessed
 '''
 while True:
     #Compares the current time to the time that you wish to have the sites blocked
-    if dt(dt.now().year, dt.now().month, dt.now().day, 8) < dt.now() < dt(dt.now().year, dt.now().month, dt.now().day, 16):
+    if dt(dt.now().year, dt.now().month, dt.now().day, 8) < dt.now() < dt(dt.now().year, dt.now().month, dt.now().day, 10):
         #opens the host file and check to see if the sites are already printed in the file
         with open(hosts_temp, 'r+') as file:
             content = file.read()
@@ -27,6 +27,12 @@ while True:
                     file.write(redirect + " " + site + "\n")
     #When not in the time frame remove the sites from the file
     else:
-        print('Fun hours')
+        with open(hosts_temp, 'r+') as file:
+            content = file.readlines()
+            file.seek(0)
+            for line in content:
+                if not any(site in line for site in websites):
+                    file.write(line)
+            file.truncate()
     time.sleep(5)
     
